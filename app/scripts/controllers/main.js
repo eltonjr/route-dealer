@@ -1,6 +1,4 @@
-var app = angular.module('RouteDealer', []);
-
-app.controller('MainCtrl', ['$scope', function($scope){
+App.controller('MainCtrl', ['$scope', function($scope){
 
 	var map
 		, directionsService
@@ -85,5 +83,3 @@ app.controller('MainCtrl', ['$scope', function($scope){
 	}
 
 }]);
-
-
