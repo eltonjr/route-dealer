@@ -4,7 +4,8 @@ app.controller('MainCtrl', ['$scope', function($scope){
 
 	var map
 		, directionsService
-		, directionsDisplay;
+		, directionsDisplay
+		, directionsDisplay2;
 
 	google.maps.event.addDomListener(window, 'load', init);
 	function init() {
@@ -15,9 +16,11 @@ app.controller('MainCtrl', ['$scope', function($scope){
 
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 		directionsService = new google.maps.DirectionsService();
-		directionsDisplay = new google.maps.DirectionsRenderer();
+		directionsDisplay = new google.maps.DirectionsRenderer({ polylineOptions: { strokeColor: "#FF5757" } });
+		directionsDisplay2 = new google.maps.DirectionsRenderer({ polylineOptions: { strokeColor: "#57AEFF" } });
 
 		directionsDisplay.setMap(map);
+		directionsDisplay2.setMap(map);
 
 		(function bindMapEvents() {
 			google.maps.event.addListener(map, 'rightclick', rightClickHandler);
@@ -29,6 +32,7 @@ app.controller('MainCtrl', ['$scope', function($scope){
 		})();
 
 		drawTestRoute();
+		drawSecondRoute();
 	}
 
 	function drawTestRoute() {
@@ -49,7 +53,29 @@ app.controller('MainCtrl', ['$scope', function($scope){
 		directionsService.route(request, function(response, status){
 			if(status == google.maps.DirectionsStatus.OK){
 				directionsDisplay.setDirections(response);
+			} else {
+				console.log("SOMETHING WRONG");
+				console.log(status);
 				console.log(response);
+			}
+		});
+	}
+
+	function drawSecondRoute() {
+		var request = {
+			origin: "Criciúma, SC",
+			destination: "Mafra, SC",
+			waypoints: [{
+					location: "Canoinhas, SC",
+					stopover: true //optimize only works with stopover points, so this must be true
+				}],
+			optimizeWaypoints: true,
+			travelMode: google.maps.TravelMode.DRIVING
+		};
+
+		directionsService.route(request, function(response, status){
+			if(status == google.maps.DirectionsStatus.OK){
+				directionsDisplay2.setDirections(response);
 			} else {
 				console.log("SOMETHING WRONG");
 				console.log(status);
